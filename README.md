@@ -1,10 +1,10 @@
 # Gen-AI-Data-Engineering-Agent-Automating-Schema-Inference-and-Format-Conversion
 
 ## Overview
-The GenAI-Powered Data Engineering Agent is a fully autonomous agent that builds data pipelines to automate schema inference, data format detection, serialization, and transformation. It recognizes file types (JSON, CSV, XML, Avro, Parquet) and extracts schemas. It also generates Python code that actively standardizes, cleans, and stores data.
+The GenAI-Powered Data Engineering Agent is a fully autonomous agent that builds data pipelines to automate schema inference, data format detection, serialization, and transformation. It recognizes file types (JSON, CSV, XML) and extracts schemas. It also generates Python code that actively standardizes, cleans, and stores data.
 
 ## Features
-- Detects JSON, CSV, XML, Avro, and Parquet formats in local/S3 storage
+- Detects JSON, CSV, adn XML formats in local/S3 storage
 - Extracts and infers schemas including nested structures and missing values
 - Generates Python serialization/deserialization classes using GenAI
 - Transforms and standardizes data into Parquet for analytics and Avro for streaming
