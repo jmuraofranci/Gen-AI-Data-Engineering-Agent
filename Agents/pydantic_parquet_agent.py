@@ -2,7 +2,6 @@ from pydantic import BaseModel, create_model
 import pandas as pd
 import json
 import csv
-import yaml
 import xml.etree.ElementTree as ET
 from io import BytesIO
 from typing import List
