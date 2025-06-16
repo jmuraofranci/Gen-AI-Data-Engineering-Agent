@@ -1,0 +1,30 @@
+[project]
+name = "ai-agents"
+version = "0.1.0"
+description = "AI Agents with LangChain"
+requires-python = ">=3.10"
+
+dependencies = [
+    "boto3==1.35.87",
+    "bs4>=0.0.2",
+    "faiss-cpu==1.9.0",
+    "fireducks>=1.1.7",
+    "ipykernel>=6.29.5",
+    "jupyter-client>=8.6.3",
+    "langchain==0.3.13",
+    "langchain-aws>=0.2.10",
+    "langchain-community>=0.3.13",
+    "langchainhub>=0.1.21",
+    "langgraph>=0.2.72",
+    "litellm==1.55.12",
+    "llama-index==0.12.8",
+    "pypdf>=5.1.0",
+    "rank-bm25>=0.2.2",
+    "sentence-transformers>=3.4.1",
+    "unstructured>=0.14.8",
+    "zmq>=0.0.0",
+    "pandas>=2.2.2",
+    "numpy>=1.26.4",
+    "matplotlib>=3.8.4",
+    "seaborn>=0.13.2",
+]
