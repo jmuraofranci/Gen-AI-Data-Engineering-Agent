@@ -7,6 +7,11 @@ import boto3
 import datetime
 from botocore.session import get_session
 from botocore.credentials import RefreshableCredentials
+from langchain_aws import ChatBedrockConverse
+from langchain.chat_models import init_chat_model
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.tools import tool
+from langgraph.prebuilt import create_react_agent
 
 # ARN of Role A to assume  
 role_to_assume = '[INSERT ARN HERE]'
@@ -38,9 +43,6 @@ boto3_session = boto3.Session(botocore_session=session)
 
 region: str = "us-west-2"
 
-from langchain_aws import ChatBedrockConverse
-import boto3
-
 # ---- ⚠️ Update region for your AWS setup ⚠️ ----
 bedrock_client = boto3_session.client("bedrock-runtime",
                               region_name=region)
@@ -55,8 +57,6 @@ logging.basicConfig(format='[%(asctime)s] p%(process)s {%(filename)s:%(lineno)d}
 logger = logging.getLogger(__name__)
 
 #Format Detection Tool
-from langchain_core.tools import tool
-
 @tool
 def detect_file_format(file_path: str) -> str:
     """
@@ -72,7 +72,6 @@ def detect_file_format(file_path: str) -> str:
     else:
         return f"unknown format ({ext})"
 
-from langgraph.prebuilt import create_react_agent
 
 #Create prompt to ask LLM to detect format
 path = "[INSERT PATH OF FOLDER WITH ALL FILES]"
@@ -91,8 +90,6 @@ The file is located at {path}
 """
 
 #Create LLM pipeline 
-from langchain.chat_models import init_chat_model
-from langchain_core.messages import AIMessage, HumanMessage
 model = init_chat_model("us.amazon.nova-micro-v1:0",
                         model_provider="bedrock_converse",
                         region_name="us-east-1",
