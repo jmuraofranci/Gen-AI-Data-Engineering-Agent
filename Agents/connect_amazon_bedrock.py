@@ -8,7 +8,8 @@ import datetime
 from botocore.session import get_session
 from botocore.credentials import RefreshableCredentials
 from langchain_aws import ChatBedrockConverse
-
+from langchain.chat_models import init_chat_model
+from langchain_core.messages import AIMessage, HumanMessage
 # ARN of Role A to assume  
 role_to_assume = '[INSERT ARN HERE]'
 
