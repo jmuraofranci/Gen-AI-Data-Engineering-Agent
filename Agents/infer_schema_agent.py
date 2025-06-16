@@ -10,6 +10,9 @@ from botocore.credentials import RefreshableCredentials
 import pandas as pd
 import json
 import xml.etree.ElementTree as ET
+from langchain_aws import ChatBedrockConverse
+from langchain.chat_models import init_chat_model
+from langchain_core.messages import AIMessage, HumanMessage
 
 # ARN of Role A to assume  
 role_to_assume = '[INSERT ARN HERE]'
@@ -40,9 +43,6 @@ session._credentials = refresh_creds
 boto3_session = boto3.Session(botocore_session=session)
 
 region: str = "us-west-2"
-
-from langchain_aws import ChatBedrockConverse
-import boto3
 
 # ---- ⚠️ Update region for your AWS setup ⚠️ ----
 bedrock_client = boto3_session.client("bedrock-runtime",
@@ -127,8 +127,6 @@ The file is located at {path}
 """
 
 #Create LLM pipeline 
-from langchain.chat_models import init_chat_model
-from langchain_core.messages import AIMessage, HumanMessage
 model = init_chat_model("us.amazon.nova-micro-v1:0",
                         model_provider="bedrock_converse",
                         region_name="us-east-1",
