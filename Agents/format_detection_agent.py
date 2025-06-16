@@ -69,15 +69,13 @@ def detect_file_format(file_path: str) -> str:
         return "json"
     elif ext == ".xml":
         return "xml"
-    elif ext == ".parquet":
-        return "parquet"
     else:
         return f"unknown format ({ext})"
 
 from langgraph.prebuilt import create_react_agent
 
 #Create prompt to ask LLM to detect format
-path = "[INSERT PATH OF FOLDER WITH ALL FILES."
+path = "[INSERT PATH OF FOLDER WITH ALL FILES]"
 
 query = f"""
 You are a helpful data assistant. Your job is to detect the format of each file in the folder path (CSV, JSON, or XML).
@@ -107,4 +105,4 @@ agent_executor = create_react_agent(model, tools)
 response = agent_executor.invoke({"messages": [HumanMessage(content=query)]})
 logger.info(response["messages"])
 
-Path("answer.txt").write_text(response["messages"][-1].content)
+Path("file_formats.txt").write_text(response["messages"][-1].content)
