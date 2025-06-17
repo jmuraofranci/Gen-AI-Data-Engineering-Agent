@@ -12,15 +12,20 @@ from langchain.chat_models import init_chat_model
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.prebuilt import create_react_agent
 from langchain_core.tools import tool
-# ARN of Role A to assume  
-role_to_assume = '[INSERT ARN HERE]'
+
+# Setup logging
+logging.basicConfig(format='[%(asctime)s] p%(process)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# AWS Session Setup
+ROLE_TO_ASSUME = Path(os.path.join(os.environ["HOME"], "BedrockCrossAccount.txt")).read_text().strip()
+logger.info(f"ROLE_TO_ASSUME={ROLE_TO_ASSUME}")
 
 def get_credentials():
     sts_client = boto3.client('sts')
     assumed_role = sts_client.assume_role(
-        RoleArn=role_to_assume,
+        RoleArn=ROLE_TO_ASSUME,
         RoleSessionName='cross-account-session',
-        # Don't set DurationSeconds when role chaining
     )
     return {
         'access_key': assumed_role['Credentials']['AccessKeyId'],
@@ -29,27 +34,29 @@ def get_credentials():
         'expiry_time': assumed_role['Credentials']['Expiration'].isoformat()
     }
 
+
 session = get_session()
 refresh_creds = RefreshableCredentials.create_from_metadata(
     metadata=get_credentials(),
     refresh_using=get_credentials,
     method='sts-assume-role'
 )
-
 # Create a new session with refreshable credentials
 session._credentials = refresh_creds
 boto3_session = boto3.Session(botocore_session=session)
+region: str = "us-east-1"
 
-region: str = "us-west-2"
+bedrock_client = boto3_session.client("bedrock-runtime", region_name=region)
 
-# ---- ⚠️ Update region for your AWS setup ⚠️ ----
-bedrock_client = boto3_session.client("bedrock-runtime",
-                              region_name=region)
+model = init_chat_model("us.anthropic.claude-3-5-haiku-20241022-v1:0",
+                        model_provider="bedrock_converse",
+                        region_name="us-east-1",
+                        client=bedrock_client)
 
-llm = ChatBedrockConverse(
-    client=bedrock_client,
-    model_id="us.amazon.nova-micro-v1:0"
-)
+nova_model = init_chat_model("us.amazon.nova-micro-v1:0",
+                        model_provider="bedrock_converse",
+                        region_name="us-east-1",
+                        client=bedrock_client)
 
-logging.basicConfig(format='[%(asctime)s] p%(process)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
+data_dir = Path("generated_data")
+data_dir.mkdir(exist_ok=True)
